@@ -1,97 +1,128 @@
 import React, { useRef, useState } from 'react';
 import NavBar from './Component/NavBar';
-import CreatedPost from './Component/CreatedPost';
-import Post from './Component/Post';
-import PostContainer from './Component/PostContainer';
 import { toast } from 'react-toastify'; // Import toast function if you're using it
 import Home from './Component/Home';
 import SignUp from './Component/SingUp';
 import LoginPage from './Component/LoginPage';
+import CreatedProfile from './Component/CreatedProfile';
+import Footer from './Component/Footer';
+import ShowProfile from './Component/ShowProfile';
+import Post from './Component/Post';
+import PostList from './Component/PostList';
+import PostContainer from './Component/PostContainer';
+import PostListProvider from './Store/Posts-List-Store';
+import CreatedPost from './Component/CreatedPost';
+
+
+
 
 function App() {
-  const initialPost = {
-    url: 'https://cdn.pixabay.com/photo/2015/01/06/16/14/woman-590490_1280.jpg',
-    Name: 'rajshree',
-    aboutPost: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id arcu ut elit fermentum congue at ac libero.'
-  };
-
-  const [createdPost, setCreatedPost] = useState([initialPost]);
-  const [displayedPost, setDisplayedPost] = useState(null);
-
-  const newPosturl = useRef(null);
-  const newPostName = useRef(null);
-  const newPostaboutPost = useRef(null);
+  
+  const [displayedProfile, setDisplayedProfile] = useState(null);
+  const [isFooterVisible, setIsFooterVisible] = useState(true); // State to manage footer visibility
 
   const handleOnClick = (name) => {
     console.log(name);
-    setDisplayedPost(name);
+    setDisplayedProfile(name);
+
+    if (name === 'ShowProfile') {
+      setIsFooterVisible(false); // Hide footer when ShowProfile is clicked
+    } else {
+      setIsFooterVisible(true); // Show footer for other components
+    }
   };
 
-  const handleCreatedPost = (event) => {
-    event.preventDefault();
-    const url = newPosturl.current?.value || '';
-    const aboutPost = newPostaboutPost.current?.value || '';
-    const Name = newPostName.current?.value || '';
-    if (!url || !aboutPost || !Name) {
-      toast.error('Please fill all fields.'); // Notify user about empty fields
-      return;
-    }
-    const newPost = {
-      url: url,
-      Name: Name,
-      aboutPost: aboutPost,
+  const [signUpData, setSignUpData] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailAddressRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const firstName = firstNameRef.current.value;
+    const lastName = lastNameRef.current.value;
+    const emailAddress = emailAddressRef.current.value;
+    const password = passwordRef.current.value;
+    console.log(firstName, lastName, emailAddress, password);
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      emailAddress: emailAddress,
+      password: password,
     };
-    setCreatedPost(prevPosts => [...prevPosts, newPost]);
 
-    // Clear input fields
-    newPosturl.current.value = '';
-    newPostaboutPost.current.value = '';
-    newPostName.current.value = '';
-    toast.success('Post created successfully.');
+    setSignUpData([...signUpData, data]);
+    handleOnClick('Home');
+
+    // Clear input values after submission
+    firstNameRef.current.value = "";
+    lastNameRef.current.value = "";
+    emailAddressRef.current.value = "";
+    passwordRef.current.value = "";
   };
 
-  const deletePost = (Name) => {
-    if (window.confirm('Are you sure you want to delete this post?')) {
-      console.log(`Delete ${Name}`);
-      const newPost = createdPost.filter((post) => post.Name !== Name);
-      setCreatedPost(newPost);
-      toast.success('Post deleted successfully.');
+  const login = (e) => {
+    e.preventDefault();
+    const emailAddress = e.target.email.value; // Access email input value
+  const password = e.target.password.value; // Access password input value
+    console.log(emailAddress, password);
+    const user = signUpData.find(user => user.emailAddress === emailAddress && user.password === password);
+
+    if (user) {
+      toast.success('Login successfully');
+      setIsLoggedIn(true);
+      handleOnClick('Home');
+      
+    } else {
+      // Handle invalid login
+      console.log("Invalid email or password");
+      toast.error('Invalid email or password.');
+      
     }
   };
-
+  
   return (
     <>
+      <PostListProvider>
       <NavBar handleOnClick={handleOnClick} />
       <PostContainer>
-      {displayedPost === 'Post' ? (
+      {displayedProfile === 'Profile' ? (
     
-         <Post createdPost={createdPost} deletePost={deletePost} />
-         
+        <ShowProfile/>
         
-      ) : displayedPost === 'Created post' ? (
+      ) : displayedProfile === 'Created Profile' ? (
         
-          <CreatedPost
-            handleCreatedPost={handleCreatedPost}
-            newPosturl={newPosturl}
-            newPostName={newPostName}
-            newPostaboutPost={newPostaboutPost}
-            deletePost={deletePost}
-          />
+          <CreatedProfile/>
+          
         
-      ) : displayedPost==='Home'?(
+      ) : displayedProfile==='Home'?(
        
           <Home/>
        
-      ):displayedPost==='Login'?(
-       
-        <LoginPage/>
+      ):displayedProfile==='Login'?(
+        
+        <LoginPage login={login}/>
+
+      ):displayedProfile==='Post'?(
+        <PostList/>
+
+      ):displayedProfile=='Created post'?(
+          <CreatedPost/>
       ):
       (
+    
+        <SignUp handleSubmit={handleSubmit} firstNameRef={firstNameRef} lastNameRef={lastNameRef} 
+        emailAddressRef={ emailAddressRef} passwordRef={passwordRef} />
       
-        <SignUp/>
-      
-      )}
+      )
+      }
       </PostContainer>
+      {isFooterVisible && <Footer />} {/* Render footer based on visibility state */}
+      </PostListProvider>
+     
     </>
   );
 }

@@ -1,68 +1,75 @@
-import React, { useState } from 'react';
-import { FcLike } from "react-icons/fc";
-import { IoIosHeartDislike } from "react-icons/io";
+import React, { useContext } from "react";
+import { PostList } from "../Store/Posts-List-Store";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineLike } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { FaComment } from "react-icons/fa";
 
-const Post = ({ createdPost, deletePost }) => {
-    const [likes, setLikes] = useState(Array(createdPost.length).fill(0));
+const Post = ({ post }) => {
+  const { deletePost } = useContext(PostList);
 
-    const handleLike = (index) => {
-        const updatedLikes = [...likes];
-        updatedLikes[index]++;
-        setLikes(updatedLikes);
-    };
+  return (
+    <div className="border rounded-lg overflow-hidden sm:p-3 md:p-4 lg:p-6 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+      {/* Reaction badge */}
+      <button type="button" className="relative">
+        <span className="absolute top-0 start-full -translate-x-1/2 translate-y-1/2 inline-block p-4 px-2 py-0.5 text-xs font-bold leading-4 text-white bg-red-600 rounded-full ">
+          {post.reactions}+<span className="sr-only">unread messages</span>
+        </span>
+      </button>
 
-    const handleDislike = (index) => {
-        const updatedLikes = [...likes];
-        updatedLikes[index]--;
-        setLikes(updatedLikes);
-    };
+      {/* Profile picture */}
+      <div className="flex justify-center mt-4">
+        <img
+          className="w-66 h-66 rounded"
+          src={post.photoURL}
+          alt="Profile Pic"
+        />
+      </div>
 
-    const handleDelete = (name) => {
-        deletePost(name);
-        toast.success('Post deleted successfully.');
-    };
+      {/* Post details */}
+      <div className="mt-8">
+        {" "}
+        {/* Adjusted top padding */}
+        <h1 className="text-lg font-semibold">{post.Name}</h1>
+        <h2 className="text-gray-600 text-sm mb-4">{post.title}</h2>
+        <p className="text-gray-800">{post.caption}{post.body}</p>
+      </div>
 
-    return (
-        <>
-            {createdPost.map((post, index) => (
-                <div key={index} className='w-1/4 border-solid border-slate-900 border-2 min-h-96 rounded p-5'>
-                    <div className='flex justify-evenly items-center'>
-                        <img className='rounded-full w-72 h-72' src={post.url} alt="Profile Pic" />
-                    </div>
+      {/* Tags */}
+      <div className="flex flex-wrap mt-4">
+        {post.tags.map((tag, index) => (
+          <button
+            key={index}
+            className="bg-cyan-500 hover:bg-cyan-600 text-white py-1 px-3 rounded mr-2 mb-2"
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
 
-                    <div>
-                        <h2 className='text-center my-5 font-mono font-medium'>Profile</h2>
-                        <h1 className='my-2 font-mono font-medium '>Name: {post.Name}</h1>
-                        <p className='my-4'>{post.aboutPost}</p>
-                        <hr />
-                        <div className='flex justify-evenly items-center'>
-                            <div className='flex flex-col my-2'>
-                                <button className='text-2xl flex' onClick={() => handleLike(index)}>
-                                    <FcLike />
-                                </button>
-                            </div>
-                            <div className='flex flex-col'>
-                                <button className='text-2xl p-2' onClick={() => handleDislike(index)}>
-                                    <IoIosHeartDislike />
-                                </button>
-                            </div>
-                            <div className='flex flex-col text-blue-500'>
-                                <button className='text-2xl p-2' onClick={() => handleDelete(post.Name)}>
-                                    <MdDelete />
-                                </button>
-                            </div>
-                        </div>
-                        <hr />
-                        <p className='text-xs border-2 text-center rounded-full'>{likes[index]}</p>
-                    </div>
-                </div>
-            ))}
-            <ToastContainer position="top-center" pauseOnHover theme="colored" />
-        </>
-    );
-}
+      {/* Delete button */}
+      <div className="flex justify-around content-center items-center border rounded-lg overflow-hidden p-2 mt-2">
+        <button
+          className="bg-red-600 hover:bg-red-700 text-white py-2 px-2 rounded  flex items-center text-1xl font-extrabold"
+          onClick={() => deletePost(post.id)}
+        >
+          <MdDelete />
+        </button>
+
+        <button className="bg-pink-600 hover:bg-pink-700 text-white py-2 px-2 rounded-full flex items-center text-1xl font-extrabold ">
+        <FaComment />
+        </button>
+        
+        <button className="bg-pink-600 hover:bg-pink-700 text-white py-2 px-2 rounded-full  flex items-center text-1xl font-extrabold ">
+          <AiOutlineLike />
+        </button>
+
+      </div>
+
+      <ToastContainer position="top-center" pauseOnHover theme="colored" />
+    </div>
+  );
+};
 
 export default Post;

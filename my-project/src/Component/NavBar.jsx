@@ -4,10 +4,13 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Home', href: '#' },
-  { name: 'Post', href: '#' },
-  { name: 'Created post', href: '#' },
+  { name: 'Profile', href: '#' },
+  { name: 'Created Profile', href: '#' },
   { name: 'Signup', href: '#' },
-  { name: 'Login', href: '#' }, // Add the Login option
+  { name: 'Created post', href: '#' },
+  {name :'Post', href: '#' },
+ 
+ 
 ];
 
 export default function NavBar(props) {
@@ -50,14 +53,16 @@ export default function NavBar(props) {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            <a href="#" className="text-sm font-semibold leading-6 text-gray-900"
+             onClick={() => props.handleOnClick("Login")}>
               Log in <span aria-hidden="true">&rarr;</span>
+             
             </a>
           </div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
           <div className="fixed inset-0 z-50" />
-          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 ">
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
@@ -94,7 +99,7 @@ export default function NavBar(props) {
                   <a
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    onChange={() => props.handleOnClick('Login')}
+                    onClick={() => props.handleOnClick("Login")}
                   >
                     Log in
                   </a>
