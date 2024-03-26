@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { PostList } from "../Store/Posts-List-Store";
+import { useNavigate } from "react-router-dom";
 
-export default function SignUp(props) {
+
+export default function SignUp() {
+  
+  const {signUp} = useContext(PostList)
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const navigate=useNavigate()
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -17,17 +24,42 @@ export default function SignUp(props) {
     setPasswordsMatch(password === confirmPassword);
   }, [password, confirmPassword]);
 
+
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailAddressRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    const firstName = firstNameRef.current.value;
+    const lastName = lastNameRef.current.value;
+    const emailAddress = emailAddressRef.current.value;
+    const password = passwordRef.current.value;
+    console.log(firstName, lastName, emailAddress, password);
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      emailAddress: emailAddress,
+      password: password,
+    };
+
+    signUp(data);
+    navigate("/home");
+ 
+  }
+
   return (
     <>
-      <div className="flex flex-col sm:flex-row border-solid border-slate-900 border-2 mx-auto max-w-7xl rounded">
-        <div className="w-full sm:w-1/2">
+      <div className="flex flex-col lg:flex-row  mx-auto max-w-7xl rounded w-8/12 mt-40">
+        <div className="hidden md:block lg:w-1/2 lg:flex">
           <img
-            className="rounded max-w-full h-auto"
+            className="rounded-s h-full object-contain   "
             src="https://cdn.pixabay.com/photo/2019/09/20/10/40/write-4491416_1280.jpg"
             alt=""
           />
         </div>
-        <div className="w-full sm:w-1/2 p-4 sm:p-10 mt-20">
+        <div className=" w-full lg:w-1/2 p-4 lg:p-10 border rounded-r overflow-hidden">
           <div className="sm:max-w-sm mx-auto">
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign up for an account
@@ -35,7 +67,7 @@ export default function SignUp(props) {
           </div>
 
           <div className="mt-10">
-            <form className="space-y-6" onSubmit={props.handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="firstName"
@@ -45,7 +77,7 @@ export default function SignUp(props) {
                 </label>
                 <div className="mt-2">
                   <input
-                    ref={props.firstNameRef}
+                    ref={firstNameRef}
                     id="firstName"
                     name="firstName"
                     type="text"
@@ -65,7 +97,7 @@ export default function SignUp(props) {
                 </label>
                 <div className="mt-2">
                   <input
-                    ref={props.lastNameRef}
+                    ref={lastNameRef}
                     id="lastName"
                     name="lastName"
                     type="text"
@@ -85,7 +117,7 @@ export default function SignUp(props) {
                 </label>
                 <div className="mt-2">
                   <input
-                    ref={props.emailAddressRef}
+                    ref={emailAddressRef}
                     id="email"
                     name="email"
                     type="email"
@@ -105,7 +137,7 @@ export default function SignUp(props) {
                 </label>
                 <div className="mt-2">
                   <input
-                    ref={props.passwordRef}
+                    ref={passwordRef}
                     id="password"
                     name="password"
                     type="password"

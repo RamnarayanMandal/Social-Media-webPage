@@ -2,11 +2,13 @@ import React, { useContext, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PostList } from "../Store/Posts-List-Store";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatedProfile() {
   // Function to handle form submission
    
   const {addProfile} =useContext(PostList);
+  const navagite = useNavigate();
 
   const newProfileurl = useRef(null);
   const newProfileName = useRef(null);
@@ -39,14 +41,16 @@ export default function CreatedProfile() {
     newProfileGender.current.value = '';
     newProfileUsername.current.value = '';
     toast.success('Profile created successfully.');
+    navagite("/profile");
   };
 
 
 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row min-h-full min-w-full justify-center content-center sm:justify-between bg-gray-100 ">
-        <div className="w-full sm:w-1/2 lg:w-5/12 xl:w-4/12  sm:mb-0">
+    <> 
+       <div className="flex justify-center content-center items-center">
+      <div className="flex flex-col sm:flex-row  w-11/12 justify-center content-center sm:justify-between lg:bg-gray-100 p-10 md:p-0 lg:p-0 mt-40 ">
+        <div className="w-full sm:w-1/2 lg:w-1/2 xl:w-1/2 m-0">
           <img
             className="h-full w-full object-cover rounded-lg shadow-md"
             src="https://cdn.pixabay.com/photo/2019/08/01/05/59/girl-4376755_1280.jpg"
@@ -172,6 +176,7 @@ export default function CreatedProfile() {
             </form>
           </div>
         </div>
+      </div>
       </div>
       <ToastContainer position="top-center" pauseOnHover theme="colored" />
     </>

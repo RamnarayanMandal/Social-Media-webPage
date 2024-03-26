@@ -10,23 +10,15 @@ const Post = ({ post }) => {
   const { deletePost } = useContext(PostList);
 
   return (
-    <div className="border rounded-lg overflow-hidden sm:p-3 md:p-4 lg:p-6 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+    <>
+    
+    <div className="border rounded-lg overflow-hidden sm:p-3 md:p-4 lg:p-6 w-full ">
       {/* Reaction badge */}
       <button type="button" className="relative">
         <span className="absolute top-0 start-full -translate-x-1/2 translate-y-1/2 inline-block p-4 px-2 py-0.5 text-xs font-bold leading-4 text-white bg-red-600 rounded-full ">
           {post.reactions}+<span className="sr-only">unread messages</span>
         </span>
       </button>
-
-      {/* Profile picture */}
-      <div className="flex justify-center mt-4">
-        <img
-          className="w-66 h-66 rounded"
-          src={post.photoURL}
-          alt="Profile Pic"
-        />
-      </div>
-
       {/* Post details */}
       <div className="mt-8">
         {" "}
@@ -69,6 +61,8 @@ const Post = ({ post }) => {
 
       <ToastContainer position="top-center" pauseOnHover theme="colored" />
     </div>
+   
+    </>
   );
 };
 

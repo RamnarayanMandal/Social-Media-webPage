@@ -1,40 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Post from './Post';
-import{ PostList as PostListData} from '../Store/Posts-List-Store';
-import WelComeSms from './WelComeSms';
-import LoadingSpinner from './LoadingSpinner';
+import React, { useContext } from "react";
+import Post from "./Post";
+import { PostList as PostListData } from "../Store/Posts-List-Store";
+import WelComeSms from "./WelComeSms";
+import LoadingSpinner from "./LoadingSpinner";
+import SideBar from "./SideBar";
 
 const PostList = () => {
-  const { postList,addIntialPosts } = useContext(PostListData); // Access the posts from the context
-  const [fetching,setFetching] = useState(false); 
+  const { postList, fetching } = useContext(PostListData); // Access the posts from the context
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    setFetching(true);
-    fetch('https://dummyjson.com/posts',{signal})
-      .then(res => res.json())
-      .then(data => {
-        addIntialPosts(data.posts);
-        setFetching(false);
-      });
-
-          return () =>{
-            console.log ('clearing up UseEffect')
-            controller.abort();
-          } 
-  }, []);
   return (
     <>
-      {fetching && <LoadingSpinner/>}
-      {!fetching && postList.length === 0 && <WelComeSms/>}
+      <div className="flex flex-wrap my-32">
+     
+        <div className=" md:w-1/4 hidden md:block ">
+          <SideBar/>
+        </div>
+        {fetching && <LoadingSpinner className="w-full lg:w-7/12 px-4 sm:px-min-32 lg:px:32" />}
+        {!fetching && postList.length === 0 && <WelComeSms className="w-full lg:w-7/12 px-4 sm:px-min-32 lg:px:32" />}
+        {!fetching &&
+        
+        <div className="w-full lg:w-6/12 px-4 sm:px-min-32 lg:px:32 flex flex-wrap gap-20">
+          {postList.map((post) => (
+            <div key={post.id} className="">
+              <Post post={post} />
+            </div>
+          ))}
+        
+        </div>
+        }
        
-     {!fetching && <div className="flex flex-wrap justify-center gap-10">
-        {postList.map((post) => ( // Iterate over posts
-          <Post key={post.id} post={post} /> // Pass each post as a prop to the Post component
-        ))}
+        <div className="hidden md:hidden lg:block w-1/4 h-screen bg-teal-600"></div>
       </div>
-      }
     </>
   );
 };

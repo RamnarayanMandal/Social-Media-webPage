@@ -1,19 +1,49 @@
+import { useContext } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PostList } from '../Store/Posts-List-Store';
+import { useNavigate } from 'react-router-dom';
 
-export default function LoginPage({ login }) {
+export default function LoginPage() {
+
+  const {login,signUpData}=useContext(PostList);
+  const navagite = useNavigate();
+  
+  const handleLogin=(e)=>{
+    e.preventDefault();
+    const emailAddress = e.target.email.value; 
+    const password = e.target.password.value;
+    login(emailAddress, password);
+
+     console.log(emailAddress, password);
+    const user = signUpData.find(
+      (user) => user.emailAddress === emailAddress && user.password === password
+    );
+  
+    if (user) {
+      toast.success("Login successfully");
+       navagite('/Home'); 
+     
+    } else {
+      // Handle invalid login
+      console.log("Invalid email or password");
+      toast.error("Invalid email or password.");
+    }
+  }
+
   return (
     <>
-      <div className="flex flex-col-reverse sm:flex-row border-solid border-slate-900 border-2 mx-auto max-w-7xl rounded gap-10">
-        <div className="w-full sm:w-1/2  p-20 lg:mt-20">
-          <div className="sm:max-w-sm mx-auto">
+    <div className='  flex justify-center content-center'>
+      <div className="flex flex-col lg:flex-row border-solid rounded mt-32 w-9/12">
+        <div className="w-full lg:p-10 border rounded-s overflow-hidden lg:bg-slate-50 bg-white ">
+          <div className="sm:max-w-sm mx-auto pt-40">
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Log in for your account
             </h2>
           </div>
 
           <div className="mt-20">
-            <form className="space-y-6" onSubmit={login}>
+            <form className="space-y-6" onSubmit={handleLogin}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Email address
@@ -74,13 +104,14 @@ export default function LoginPage({ login }) {
             </form>
           </div>
         </div>
-        <div className="w-full sm:w-1/2 border-solid border-slate-900 border-2">
+        <div className="w-full hidden md:hidden lg:grid">
           <img
-            className="w-full h-auto"
+            className="h-full w-full object-contain rounded-e"
             src="https://cdn.pixabay.com/photo/2019/03/26/18/01/reading-4083288_960_720.jpg"
             alt=""
           />
         </div>
+      </div>
       </div>
     </>
   );

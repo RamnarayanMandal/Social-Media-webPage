@@ -2,9 +2,18 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import ProfileList from "./ProfileList";
+import { useNavigate } from "react-router-dom";
 
 export default function ShowProfile() {
     const [open, setOpen] = useState(true);
+    const navagite = useNavigate();
+
+    if(open) {
+        navagite('/profile')
+    }
+    else{
+        navagite('/')
+    }
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -62,7 +71,7 @@ export default function ShowProfile() {
                                                 profile
                                             </Dialog.Title>
                                         </div>
-                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">      
+                                        <div className="relative  flex-1 px-4 sm:px-6">      
                                         <ProfileList></ProfileList>
                                         </div>
                                     </div>
