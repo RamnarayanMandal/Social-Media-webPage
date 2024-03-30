@@ -4,7 +4,7 @@ import Profile from './Profile';
 
 const ProfileList = () => {
   const { profileList } = useContext(PostList); // Correct context property name
-  console.log(profileList);
+
   return (
     <>
       <div className="flex flex-wrap justify-center gap-10">

@@ -2,13 +2,22 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import ProfileList from "./ProfileList";
+import { useNavigate } from "react-router-dom";
 
 export default function ShowProfile() {
     const [open, setOpen] = useState(true);
+    const navagite = useNavigate();
+
+    if(open) {
+        navagite('/profile')
+    }
+    else{
+        navagite('/')
+    }
 
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-[100]" onClose={setOpen}>
+            <Dialog as="div" className="relative z-[100]" onClose={setOpen} >
                 <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
@@ -47,8 +56,9 @@ export default function ShowProfile() {
                                             <button
                                                 type="button"
                                                 className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                                                onClick={() => setOpen(false)}
-                                            >
+                                                onClick={() => setOpen(false)} 
+                                                
+                                            >    
                                                 <span className="absolute -inset-2.5" />
                                                 <span className="sr-only">Close panel</span>
                                                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -61,7 +71,7 @@ export default function ShowProfile() {
                                                 profile
                                             </Dialog.Title>
                                         </div>
-                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">      
+                                        <div className="relative  flex-1 px-4 sm:px-6">      
                                         <ProfileList></ProfileList>
                                         </div>
                                     </div>
