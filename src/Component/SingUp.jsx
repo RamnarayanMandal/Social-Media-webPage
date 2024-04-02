@@ -45,7 +45,7 @@ export default function SignUp() {
     };
 
     signUp(data);
-    navigate("/home");
+    navigate("/");
  
   }
 

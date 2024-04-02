@@ -23,7 +23,7 @@ export default function LoginPage() {
   
     if (user) {
       toast.success("Login successfully");
-       navagite('/Home'); 
+       navagite('/'); 
      
     } else {
       // Handle invalid login
